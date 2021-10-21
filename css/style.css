@@ -13,7 +13,7 @@ body {
 }
 
 .wrapper {
-  height: 100%;
+  min-height: 100%;
   padding: 50px;
 }
 
@@ -21,18 +21,18 @@ body {
 /*............*/
 
 .block {
-  margin: 0 0 30px 0;
+  margin: 0px 0px 30px 0px;
 }
 
 .block__item {
-  margin: 0 0 10px 0;
+  margin: 0px 0px 10px 0px;
 }
 
 .block__title {
   width: 100%;
   text-align: left;
   font-size: 18px;
-  border-color: transparent;
+  background-color: transparent;
   color: white;
   padding: 10px;
   position: relative;
