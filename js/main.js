@@ -103,6 +103,22 @@ if (spoilersArray.length > 0) {
       const spoilerTitle = el.hasAttribute('data-spoiler') ? el : el.closest('[data-spoiler]');
       const spoilersBlock = spoilerTitle.closest('[data-spoilers]');
       const oneSpoiler = spoilersBlock.hasAttribute('data-one-spoiler') ? true : false;
+      if(!spoilersBlock.querySelectorAll('._slide').length) {
+        if(oneSpoiler && !spoilerTitle.classList.contains('_active')) {
+          hideSpoilersBody(spoilersBlock);
+        }
+        spoilerTitle.classList.toggle('_active');
+        _slideTooggle(spoilerTitle.nextElementSibling, 500);
+      }
+      e.preventDefault();
+    }
+  }
+
+  function hideSpoilersBody(spoilersBlock) {
+    const spoilerActiveTitle = spoilersBlock.querySelector('[data-spoiler]._active');
+    if(spoilerActiveTitle) {
+      spoilerActiveTitle.classList.remove('_active');
+      _slideUp(spoilerActiveTitle.nextElementSibling, 500);
     }
   }
 
