@@ -38,10 +38,74 @@ if (spoilersArray.length > 0) {
     mediaQueries = mediaQueries.filter(function(item, index, self) {
       return self.indexOf(item) === index;
     });
+
+    //Работаем с каждым брейкпоинтом 
+    mediaQueries.forEach(breakpoint => {
+      const paramsArray = breakpoint.split(",");
+      const mediaBreakpoint = paramsArray[1];
+      const mediaType = paramsArray[2];
+      const matchMedia = window.matchMedia(paramsArray[0]);
+
+      //Объекты с нужными условиями
+      const spoilersArray = breakpointsArray.filter(function(item) {
+        if (item.value === mediaBreakpoint && item.type === mediaType) {
+          return true;
+        }
+      });
+
+      //Событие
+      matchMedia.addEventListener(function () {
+        initSpoilers(spoilersArray, matchMedia);
+      });
+      initSpoilers(spoilersArray, matchMedia);
+    });
+
   }
 
-  //Работаем с каждым брейкпоинтом 
-  
+  //Инициализация
+  function initSpoilers(spoilersArray, matchMedia = false) {
+    spoilersArray.forEach(spoilersBlock => {
+      spoilersBlock = matchMedia ? spoilersBlock.item : spoilersBlock;
+      if (matchMedia.matches || !matchMedia) {
+        spoilersBlock.classList.add('_init');
+        initSpoilerBody(spoilersBlock);
+        spoilersBlock.addEventListener('click', setSpoilerAction);
+      }else {
+        spoilersBlock.classList.remove('_init');
+        initSpoilerBody(spoilersBlock, false);
+        spoilersBlock.removeEventListener('click', setSpoilerAction);
+      }
+    });
+  }
+
+  //Работа с контентом
+  function initSpoilerBody(spoilersBlock, hideSpoilerBody = true) {
+    const spoilerTitles = spoilersBlock.querySelectorAll('[data-spoiler]');
+    if (spoilerTitles.length > 0) {
+      spoilerTitles.forEach(spoilerTitle => {
+        if(hideSpoilerBody) {
+          spoilerTitle.removeAttribute('tabindex');
+          if(!spoilerTitle.classList.contains('_active')) {
+            spoilerTitle.nextElementSibling.hidden = true;
+          }
+        }else {
+          spoilerTitle.setAttribute('tabindex', '-1');
+          spoilerTitle.nextElementSibling.hidden = false;
+        }
+      });
+    }
+    
+  }
+
+  function setSpoilerAction(e) {
+    const el = e.target;
+    if(el.hasAttribute('data-spoiler') || el.closest('[data-spoiler]')) {
+      const spoilerTitle = el.hasAttribute('data-spoiler') ? el : el.closest('[data-spoiler]');
+      const spoilersBlock = spoilerTitle.closest('[data-spoilers]');
+      const oneSpoiler = spoilersBlock.hasAttribute('data-one-spoiler') ? true : false;
+    }
+  }
+
 }
 
 
